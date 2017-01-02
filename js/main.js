@@ -5,6 +5,7 @@
 
   // Definimos la escena
   const scene = new THREE.Scene();
+  let mesh = null;
 
   // Definimos la cámara
   const aspectRatio = window.innerWidth / window.innerHeight;
@@ -20,13 +21,14 @@
 
   const planeGeometry = new THREE.PlaneGeometry(200, 900);
   planeGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
-  // const geometry = new THREE.BoxGeometry(10, 10, 10);
   const groundMaterial = new THREE.MeshPhongMaterial({
     color: 0x222222
   });
-  const plane = new THREE.Mesh(planeGeometry, groundMaterial);
 
-  let mesh;
+  const plane = new THREE.Mesh(planeGeometry, groundMaterial);
+  plane.receiveShadow = true;
+
+
   const loader = new THREE.TextureLoader();
   loader.load('img/texture.jpg', function(texture) {
     // SphereGeometry (esferas) => radio,segmentos ancho,segmentos alto,
@@ -42,15 +44,22 @@
   });
 
   const pointLight = new THREE.PointLight(0xdfebff);
-  pointLight.position.y = 30;
+  pointLight.position.y = 60;
   pointLight.position.z = 20;
+  pointLight.castShadow = true;
 
-  // scene.background = new THREE.Color(0xeeeeee);
-  // scene.add(mesh);
+  const helper = new THREE.CameraHelper(pointLight.shadow.camera);
+
+  scene.background = new THREE.Color(0xeeeeee);
+  scene.add(helper);
   scene.add(plane);
   scene.add(pointLight);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  // Configurando sombras
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.soft = true;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   function loop() {
     requestAnimationFrame(loop);
