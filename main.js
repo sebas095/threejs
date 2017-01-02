@@ -15,25 +15,27 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  camera.position.z = 3;
+  camera.position.z = 25;
   camera.position.y = 1;
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const geometry = new THREE.BoxGeometry(10, 10, 10);
   const groundMaterial = new THREE.MeshPhongMaterial({
     color: 0xffffff
   });
 
   const mesh = new THREE.Mesh(geometry, groundMaterial);
   const pointLight = new THREE.PointLight(0xdfebff);
-  const ambientLight = new THREE.AmbientLight(0x404040);
   pointLight.position.y = 30;
+  pointLight.position.z = 20;
 
+  scene.background = new THREE.Color(0xeeeeee);
   scene.add(mesh);
-  scene.add(ambientLight);
   scene.add(pointLight);
 
   function loop() {
     requestAnimationFrame(loop);
+    mesh.rotation.y += 0.01;
+    mesh.rotation.z += 0.02;
     renderer.render(scene, camera);
   }
 
