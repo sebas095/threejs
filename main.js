@@ -15,5 +15,10 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  renderer.render(scene, camera);
+  function loop() {
+    requestAnimationFrame(loop);
+    renderer.render(scene, camera);
+  }
+
+  loop();
 })();
